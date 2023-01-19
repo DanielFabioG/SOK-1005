@@ -87,7 +87,8 @@ gapminder %>%
 
 #' Q3. Filter the data from Norway, Sweden, or Denmark before and including 1970.
 
-
+gapminder %>%
+  filter(country %in% c("Norway", "Sweden","Denmark"), year <= 1970)
 
 
 
@@ -96,7 +97,9 @@ gapminder %>%
 #' Q4. Following Q3. Let us say you do not like long variable names such as "gdpPercap".  
 #' Rename "gdpPercap" by gdp_pc        
 
-
+gapminder %>%
+  rename("gdp-pc" = "gdpPercap")
+  
 
 
 
@@ -105,7 +108,9 @@ gapminder %>%
 
 #' Q5. Following Q4. Arrange rows according to ascending order of "gdp_pc"
 
-
+gapminder %>%
+  rename("gdp-pc" = "gdpPercap") %>% 
+  arrange(gdp-pc)
 
 
 
