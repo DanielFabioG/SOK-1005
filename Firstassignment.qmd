@@ -24,8 +24,6 @@ library(lubridate)
 library(ggthemes)
 ```
 
-dftemp \<- dflow\[:3\]
-
 ```{r}
 #| echo: false
 
@@ -63,6 +61,8 @@ dfstrato <- dfstrato %>%
 Use only the Global temperature from each dataset (i.e., the third data column).
 
 ```{r}
+
+# Clunky mess of a code, just fixing the datasets, could of been prettier
 dflow <- dflow %>% select(Year, Mo, Globe) %>% 
   mutate(Date = ymd(paste(dflow$Year, dflow$Mo, 1, sep="-"))) %>% 
   mutate(Year = year(Date), Month = month(Date)) %>%
@@ -94,32 +94,30 @@ dftropo <- dftropo %>% select(Year, Mo, Globe) %>%
 For each of the four locations in the atmosphere, calculate the 12-month(right-aligned) moving average (or mean) (you can run ?zoo::rollmean in the R console to understand what the right-aligned average means) using all the available data points. Also, calculate a new variable called Average, which is the average of the four 12-month moving averages.
 
 ```{r}
+# Combining one dataset
 df <-cbind(dflow, dfmid, dfstrato, dftropo) %>%
   unique()
 
+# Mean of each sphere
 df <-df %>%
 mutate(rolling_mean = rollmean(Globe, 12,  fill=NA, align="right")
        ,rolling_mean2 = rollmean(Globe2, 12, fill=NA, align="right")
        ,rolling_mean3 = rollmean(Globe3, 12, fill=NA, align="right")
        ,rolling_mean4 = rollmean(Globe4, 12, fill=NA, align="right"))
-
 ```
 
 ```{r}
-
+# Pivoting longer
 df_long <- df %>%
   pivot_longer(cols = c(rolling_mean, rolling_mean2, rolling_mean3, rolling_mean4), 
                names_to = "Location", 
                values_to = "values")
-
-df_long <- df_long %>%
-  group_by(Year) %>%
-  mutate(average_temperature=mean(values))
 ```
 
 Make a plot of the four-atmosphere locations and their Average in the same plot. Note, the original data points are not to be used in the plot. Include labels identifying the location of the temperature measurements, and the Average. In the plot, you should only use data from January 1980 and onwards.
 
 ```{r}
+# Plotting figure
 df_long %>% filter(Year >= 1980) %>% 
   group_by(Year) %>% 
   mutate(Average.Temp=mean(values)) %>%
