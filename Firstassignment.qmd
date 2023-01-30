@@ -1,0 +1,142 @@
+---
+title: "Assignment 11"
+author: Daniel Fabio Groth
+format: html
+editor: visual
+echo: true
+warning: false
+---
+
+## Assignment 1 - reading static web pages
+
+On the web page: https://www.drroyspencer.com/latest-global-temperatures/
+
+We find a figure of the latest global temperature (data at the bottom of page):
+
+Download the four data series, i.e., temperature measurements at the four different locations in the atmosphere; the Lower-Troposphere, Mid-Troposphere, Tropopause, and Lower-Stratosphere. Each dataset is found using its unique URL.
+
+```{r}
+rm (list = ls())
+library(readr)
+library(zoo)
+library(tidyverse)
+library(lubridate)
+library(ggthemes)
+```
+
+dftemp \<- dflow\[:3\]
+
+```{r}
+#| echo: false
+
+dflow <- read_table("http://vortex.nsstc.uah.edu/data/msu/v6.0/tlt/uahncdc_lt_6.0.txt", 
+    col_types = cols(X1 = col_character())) %>%
+   as_tibble()
+
+dflow <- dflow %>%
+  slice(-c(530:541))
+
+dfmid <- read_table("http://vortex.nsstc.uah.edu/data/msu/v6.0/tmt/uahncdc_mt_6.0.txt", 
+    col_types = cols(X1 = col_character())) %>%
+   as_tibble()
+
+dfmid <- dfmid %>%
+  slice(-c(530:541))
+
+
+dftropo <- read_table("http://vortex.nsstc.uah.edu/data/msu/v6.0/ttp/uahncdc_tp_6.0.txt", 
+    col_types = cols(X1 = col_character())) %>%
+   as_tibble()
+
+dftropo <- dftropo %>%
+  slice(-c(530:541))
+
+
+dfstrato <- read_table("http://vortex.nsstc.uah.edu/data/msu/v6.0/tls/uahncdc_ls_6.0.txt", 
+    col_types = cols(X1 = col_character())) %>%
+   as_tibble()
+
+dfstrato <- dfstrato %>%
+  slice(-c(530:541))
+```
+
+Use only the Global temperature from each dataset (i.e., the third data column).
+
+```{r}
+dflow <- dflow %>% select(Year, Mo, Globe) %>% 
+  mutate(Date = ymd(paste(dflow$Year, dflow$Mo, 1, sep="-"))) %>% 
+  mutate(Year = year(Date), Month = month(Date)) %>%
+  mutate_if(is.character, ~as.numeric(.)) %>%
+  select(-Mo)
+  
+dfmid <- dfmid %>% select(Year, Mo, Globe) %>% 
+  mutate(Date = ymd(paste(dfmid$Year, dfmid$Mo, 1, sep="-"))) %>% 
+  mutate(Year = year(Date), Month = month(Date)) %>%
+  mutate_if(is.character, ~as.numeric(.)) %>%
+  select(-Mo, -Year, -Date, -Month) %>%
+  rename(Globe2 = Globe)
+
+dfstrato <- dfstrato %>% select(Year, Mo, Globe) %>% 
+  mutate(Date = ymd(paste(dfstrato$Year, dfstrato$Mo, 1, sep="-"))) %>% 
+  mutate(Year = year(Date), Month = month(Date)) %>%
+  mutate_if(is.character, ~as.numeric(.)) %>%
+  select(-Mo, -Year, -Date, -Month) %>%
+  rename(Globe3 = Globe)
+
+dftropo <- dftropo %>% select(Year, Mo, Globe) %>% 
+  mutate(Date = ymd(paste(dftropo$Year, dftropo$Mo, 1, sep="-"))) %>% 
+  mutate(Year = year(Date), Month = month(Date)) %>%
+  mutate_if(is.character, ~as.numeric(.)) %>%
+  select(-Mo, -Year, -Date, -Month) %>%
+  rename(Globe4 = Globe)
+```
+
+For each of the four locations in the atmosphere, calculate the 12-month(right-aligned) moving average (or mean) (you can run ?zoo::rollmean in the R console to understand what the right-aligned average means) using all the available data points. Also, calculate a new variable called Average, which is the average of the four 12-month moving averages.
+
+```{r}
+df <-cbind(dflow, dfmid, dfstrato, dftropo) %>%
+  unique()
+
+df <-df %>%
+mutate(rolling_mean = rollmean(Globe, 12,  fill=NA, align="right")
+       ,rolling_mean2 = rollmean(Globe2, 12, fill=NA, align="right")
+       ,rolling_mean3 = rollmean(Globe3, 12, fill=NA, align="right")
+       ,rolling_mean4 = rollmean(Globe4, 12, fill=NA, align="right"))
+
+```
+
+```{r}
+
+df_long <- df %>%
+  pivot_longer(cols = c(rolling_mean, rolling_mean2, rolling_mean3, rolling_mean4), 
+               names_to = "Location", 
+               values_to = "values")
+
+df_long <- df_long %>%
+  group_by(Year) %>%
+  mutate(average_temperature=mean(values))
+```
+
+Make a plot of the four-atmosphere locations and their Average in the same plot. Note, the original data points are not to be used in the plot. Include labels identifying the location of the temperature measurements, and the Average. In the plot, you should only use data from January 1980 and onwards.
+
+```{r}
+df_long %>% filter(Year >= 1980) %>% 
+  group_by(Year) %>% 
+  mutate(Average.Temp=mean(values)) %>%
+  ggplot(aes(x=Date, y=values, color=Location))+ 
+  geom_line(size=0.8) +
+  geom_line(aes(x=Date, y=Average.Temp), col="red", size=1.3)+
+  theme_fivethirtyeight()+
+  labs(title="Temperature over time",x="Year",y="Global Temperature")+
+  theme(axis.title= element_text(),
+        plot.title=element_text(hjust = 0.5))+
+  scale_color_manual(name="Location", values=c("turquoise","orange","brown","cornflowerblue"), labels=c("Lower atmosphere","Middle atmosphere","Stratosphere","Lower Tropopause"))
+
+  
+```
+
+Add an appropriate main title and labels to the axis of the plot. Modify and use the R code we have been utilizing in class and submit your R code in Canvas. The R code should replicate your plot when it is executed (run) from top to bottom.
+
+Some general considerations You should not submit a .zip file, or many files containing the data. Submit one file with your code. Your code should be general, meaning that you read the data from the source, i.e. the URL's, do all the data wrangling, and make the plot.
+
+Note This assignment submission is obligatory. If you fail to meet the deadline without providing a notice from a medical doctor that you are not able to meet the deadline, you are not eligible to submit a data science project.
