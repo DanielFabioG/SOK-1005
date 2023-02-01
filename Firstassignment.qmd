@@ -26,6 +26,7 @@ library(ggthemes)
 
 ```{r}
 #| echo: false
+#| warning: false
 
 dflow <- read_table("http://vortex.nsstc.uah.edu/data/msu/v6.0/tlt/uahncdc_lt_6.0.txt", 
     col_types = cols(X1 = col_character())) %>%
