@@ -1,7 +1,7 @@
 ---
-title: "Assignment 11"
+title: "Assignment 1"
 author: Daniel Fabio Groth
-format: html
+format: pdf
 editor: visual
 echo: true
 warning: false
@@ -61,60 +61,53 @@ dfstrato <- dfstrato %>%
 Use only the Global temperature from each dataset (i.e., the third data column).
 
 ```{r}
-
 # Clunky mess of a code, just fixing the datasets, could of been prettier
 dflow <- dflow %>% select(Year, Mo, Globe) %>% 
   mutate(Date = ymd(paste(dflow$Year, dflow$Mo, 1, sep="-"))) %>% 
   mutate(Year = year(Date), Month = month(Date)) %>%
   mutate_if(is.character, ~as.numeric(.)) %>%
+  rename(lower_t = Globe) %>%
   select(-Mo)
   
-dfmid <- dfmid %>% select(Year, Mo, Globe) %>% 
-  mutate(Date = ymd(paste(dfmid$Year, dfmid$Mo, 1, sep="-"))) %>% 
-  mutate(Year = year(Date), Month = month(Date)) %>%
+dfmid <- dfmid %>% select(Globe) %>% 
   mutate_if(is.character, ~as.numeric(.)) %>%
-  select(-Mo, -Year, -Date, -Month) %>%
-  rename(Globe2 = Globe)
+  rename(mid_t = Globe)
 
-dfstrato <- dfstrato %>% select(Year, Mo, Globe) %>% 
-  mutate(Date = ymd(paste(dfstrato$Year, dfstrato$Mo, 1, sep="-"))) %>% 
-  mutate(Year = year(Date), Month = month(Date)) %>%
+dftropo <- dftropo %>% select(Globe) %>% 
   mutate_if(is.character, ~as.numeric(.)) %>%
-  select(-Mo, -Year, -Date, -Month) %>%
-  rename(Globe3 = Globe)
+  rename(tropo = Globe)
 
-dftropo <- dftropo %>% select(Year, Mo, Globe) %>% 
-  mutate(Date = ymd(paste(dftropo$Year, dftropo$Mo, 1, sep="-"))) %>% 
-  mutate(Year = year(Date), Month = month(Date)) %>%
+dfstrato <- dfstrato %>% select(Globe) %>% 
   mutate_if(is.character, ~as.numeric(.)) %>%
-  select(-Mo, -Year, -Date, -Month) %>%
-  rename(Globe4 = Globe)
+  rename(lower_s = Globe)
+
+# Combining to one dataset
+df <-cbind(dflow, dfmid, dfstrato, dftropo) %>%
+  unique()
 ```
 
 For each of the four locations in the atmosphere, calculate the 12-month(right-aligned) moving average (or mean) (you can run ?zoo::rollmean in the R console to understand what the right-aligned average means) using all the available data points. Also, calculate a new variable called Average, which is the average of the four 12-month moving averages.
 
 ```{r}
-# Combining one dataset
-df <-cbind(dflow, dfmid, dfstrato, dftropo) %>%
-  unique()
-
 # Mean of each sphere
 df <-df %>%
-mutate(rolling_mean = rollmean(Globe, 12,  fill=NA, align="right")
-       ,rolling_mean2 = rollmean(Globe2, 12, fill=NA, align="right")
-       ,rolling_mean3 = rollmean(Globe3, 12, fill=NA, align="right")
-       ,rolling_mean4 = rollmean(Globe4, 12, fill=NA, align="right"))
+mutate(lower_t_mean = rollmean(lower_t, 12,  fill=NA, align="right")
+       ,mid_t_mean = rollmean(mid_t, 12, fill=NA, align="right")
+       ,tropo_mean = rollmean(tropo, 12, fill=NA, align="right")
+       ,lower_s_mean = rollmean(lower_s, 12, fill=NA, align="right"))
 ```
 
 ```{r}
 # Pivoting longer
 df_long <- df %>%
-  pivot_longer(cols = c(rolling_mean, rolling_mean2, rolling_mean3, rolling_mean4), 
+  pivot_longer(cols = c(lower_t_mean, mid_t_mean, tropo_mean, lower_s_mean), 
                names_to = "Location", 
                values_to = "values")
 ```
 
-Make a plot of the four-atmosphere locations and their Average in the same plot. Note, the original data points are not to be used in the plot. Include labels identifying the location of the temperature measurements, and the Average. In the plot, you should only use data from January 1980 and onwards.
+Make a plot of the four-atmosphere locations and their Average in the same plot. Note, the original data points are not to be used in the plot. Include labels identifying the location of the temperature measurements, and the Average. In the plot, you should only use data from January 1980 and onwards
+
+Add an appropriate main title and labels to the axis of the plot. Modify and use the R code we have been utilizing in class and submit your R code in Canvas. The R code should replicate your plot when it is executed (run) from top to bottom.
 
 ```{r}
 # Plotting figure
@@ -122,27 +115,19 @@ df_long %>% filter(Year >= 1980) %>%
   group_by(Year) %>% 
   mutate(Average.Temp=mean(values)) %>%
   ggplot(aes(x=Date, y=values, color=Location))+ 
-  geom_line(size=0.8) +
-  geom_line(aes(x=Date, y=Average.Temp,col="red"), size=1.5)+
+  geom_line(linewidth=0.8) +
+  geom_line(aes(x=Date, y=Average.Temp,col="#0072B2"),size=1.4)+
   theme_fivethirtyeight()+
   labs(title="Temperature over time", x="Year",y="Global Temperature")+
-  theme(legend.text= element_text(size=7),
-        legend.title= element_text(size=8),
+    theme(legend.text= element_text(size=6),
+        legend.title= element_text(size=7),
         axis.title= element_text(),
         plot.title=element_text(hjust = 0.5))+
-  scale_color_manual(name="Location", values=c("red"
+    scale_color_manual(name="Location", values=c("#0072B2"
     ,"orange"
     ,"brown",
     "cornflowerblue",
     "turquoise"), 
-    labels=c("Average Temperature","Middle atmosphere",
-             "Stratosphere","Lower Tropopause","Lower Atmosphere"))
-
-  
+    labels=c("Average Temperature","Lower Troposphere",
+             "Mid-Tropoosphere","Lower Stratosphere","Tropopause"))
 ```
-
-Add an appropriate main title and labels to the axis of the plot. Modify and use the R code we have been utilizing in class and submit your R code in Canvas. The R code should replicate your plot when it is executed (run) from top to bottom.
-
-Some general considerations You should not submit a .zip file, or many files containing the data. Submit one file with your code. Your code should be general, meaning that you read the data from the source, i.e. the URL's, do all the data wrangling, and make the plot.
-
-Note This assignment submission is obligatory. If you fail to meet the deadline without providing a notice from a medical doctor that you are not able to meet the deadline, you are not eligible to submit a data science project.
