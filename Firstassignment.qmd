@@ -63,22 +63,26 @@ Use only the Global temperature from each dataset (i.e., the third data column).
 
 ```{r}
 # Clunky mess of a code, just fixing the datasets, could of been prettier
-dflow <- dflow %>% select(Year, Mo, Globe) %>% 
+dflow <- dflow %>% 
+  select(Year, Mo, Globe) %>% 
   mutate(Date = ymd(paste(dflow$Year, dflow$Mo, 1, sep="-"))) %>% 
   mutate(Year = year(Date), Month = month(Date)) %>%
   mutate_if(is.character, ~as.numeric(.)) %>%
   rename(lower_t = Globe) %>%
   select(-Mo)
   
-dfmid <- dfmid %>% select(Globe) %>% 
+dfmid <- dfmid %>% 
+  select(Globe) %>% 
   mutate_if(is.character, ~as.numeric(.)) %>%
   rename(mid_t = Globe)
 
-dftropo <- dftropo %>% select(Globe) %>% 
+dftropo <- dftropo %>% 
+  select(Globe) %>% 
   mutate_if(is.character, ~as.numeric(.)) %>%
   rename(tropo = Globe)
 
-dfstrato <- dfstrato %>% select(Globe) %>% 
+dfstrato <- dfstrato %>% 
+  select(Globe) %>% 
   mutate_if(is.character, ~as.numeric(.)) %>%
   rename(lower_s = Globe)
 
@@ -120,7 +124,7 @@ df_long %>% filter(Year >= 1980) %>%
   geom_line(aes(x=Date, y=Average.Temp,col="#0072B2"),size=1.4)+
   theme_fivethirtyeight()+
   labs(title="Temperature over time", x="Year",y="Global Temperature")+
-    theme(legend.text= element_text(size=6),
+    theme(legend.text= element_text(size=5),
         legend.title= element_text(size=7),
         axis.title= element_text(),
         plot.title=element_text(hjust = 0.5))+
