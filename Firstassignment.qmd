@@ -118,17 +118,16 @@ Add an appropriate main title and labels to the axis of the plot. Modify and use
 # Plotting figure
 df_long %>% filter(Year >= 1980) %>% 
   group_by(Year) %>% 
-  mutate(Average.Temp=mean(values)) %>%
+  mutate(average_temp=mean(values)) %>%
   ggplot(aes(x=Date, y=values, color=Location))+ 
   geom_line(linewidth=0.8) +
-  geom_line(aes(x=Date, y=Average.Temp,col="#0072B2"),size=1.4)+
+  geom_line(aes(x=Date, y=average_temp,col="#0072B2"),size=1.4)+
   theme_fivethirtyeight()+
-  labs(title="Temperature over time", x="Year",y="Global Temperature")+
-    theme(legend.text= element_text(size=5),
-        legend.title= element_text(size=7),
+  labs(title="Tmperature over time", x="Year",y="Global °C Temperature")+
+    theme(legend.text= element_text(size=6.5),
         axis.title= element_text(),
         plot.title=element_text(hjust = 0.5))+
-    scale_color_manual(name="Location", values=c("#0072B2"
+    scale_color_manual(name="", values=c("#0072B2"
     ,"orange"
     ,"brown",
     "cornflowerblue",
