@@ -62,15 +62,22 @@ dfstrato <- dfstrato %>%
 Use only the Global temperature from each dataset (i.e., the third data column).
 
 ```{r}
-# Clunky mess of a code, just fixing the datasets, could of been prettier
+# Making a date variable of year and month
 dflow <- dflow %>% 
   select(Year, Mo, Globe) %>% 
   mutate(Date = ymd(paste(dflow$Year, dflow$Mo, 1, sep="-"))) %>% 
   mutate(Year = year(Date), Month = month(Date)) %>%
+  
+# making chr variables numeric
   mutate_if(is.character, ~as.numeric(.)) %>%
+  
+# renaming Globe to lower_t
   rename(lower_t = Globe) %>%
+  
+  #removing a variable
   select(-Mo)
   
+# Making numeric, selecting global and renaming
 dfmid <- dfmid %>% 
   select(Globe) %>% 
   mutate_if(is.character, ~as.numeric(.)) %>%
@@ -86,7 +93,7 @@ dfstrato <- dfstrato %>%
   mutate_if(is.character, ~as.numeric(.)) %>%
   rename(lower_s = Globe)
 
-# Combining to one dataset
+# Combining all the temperatures to one dataset
 df <-cbind(dflow, dfmid, dfstrato, dftropo) %>%
   unique()
 ```
@@ -121,7 +128,7 @@ df_long %>% filter(Year >= 1980) %>%
   mutate(average_temp=mean(values)) %>%
   ggplot(aes(x=Date, y=values, color=Location))+ 
   geom_line(linewidth=0.8) +
-  geom_line(aes(x=Date, y=average_temp,col="#0072B2"),size=1.4)+
+  geom_line(aes(x=Date, y=average_temp,col="#0072B2"),linewidth=1.4)+
   theme_fivethirtyeight()+
   labs(title="Tmperature over time", x="Year",y="Global °C Temperature")+
     theme(legend.text= element_text(size=6.5),
