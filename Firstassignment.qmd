@@ -130,7 +130,7 @@ df_long %>% filter(Year >= 1980) %>%
   geom_line(linewidth=0.8) +
   geom_line(aes(x=Date, y=average_temp,col="#0072B2"),linewidth=1.4)+
   theme_fivethirtyeight()+
-  labs(title="Tmperature over time", x="Year",y="Global °C Temperature")+
+  labs(title="Temperature over time", x="Year",y="Global °C Temperature")+
     theme(legend.text= element_text(size=6.5),
         axis.title= element_text(),
         plot.title=element_text(hjust = 0.5))+

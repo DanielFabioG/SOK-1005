@@ -56,7 +56,7 @@ ggplot(aes(x=fully_vaccinated_pct_of_pop, y=deaths_per_100k, label=state_name))+
   geom_text_repel(size=3)+
   # Changing and removing titles
   labs(x="Share of total population fully vaccinated", y="",
-       title="20 avg. monthly deaths per 100,000")+
+       title="Avg. monthly deaths per 100,000")+
   scale_x_continuous(labels = scales::percent_format(accuracy = 1))+
   # Writing text on plot
   annotate("text",
