@@ -12,6 +12,7 @@ rm (list = ls())
 library(jsonlite)
 library(tidyverse)
 library(ggrepel)
+library(scales)
 ```
 
 ## **Assignment 3: Reading json data from a web page**
