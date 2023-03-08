@@ -1,7 +1,7 @@
 ---
 author: "Daniel Fabio Groth"
 title: "Assignment 3"
-format: html
+format: pdf
 editor: visual
 warning: false
 echo: true
