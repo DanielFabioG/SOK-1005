@@ -46,7 +46,7 @@ df <- df %>%
 df[9, 7] = "D.C"
 ```
 
-```{r,fig.width=6, fig.height=7}
+```{r,fig.width=6, fig.height=6}
 # Creating the plot
 plot <-df %>%
 ggplot(aes(x=fully_vaccinated_pct_of_pop*100, y=deaths_per_100k, label=state_name))+
@@ -107,7 +107,7 @@ Add the custom line to ggplot using + geom_smooth(method = lm).
 lm( deaths_per_100k ~ fully_vaccinated_pct_of_pop, df)
 ```
 
-```{r,message= FALSE, fig.width=6, fig.height=7}
+```{r,message= FALSE, fig.width=6, fig.height=6}
 # Plotting the line
 plot + geom_smooth(method = lm, se=FALSE)
 ```
