@@ -1,10 +1,11 @@
 ---
 author: "Daniel Fabio Groth"
 title: "Assignment 3"
-format: pdf
+format: html
 editor: visual
 warning: false
-echo: true
+echo: false
+message: false
 ---
 
 ```{r}
@@ -41,12 +42,14 @@ df <-fromJSON("https://static01.nyt.com/newsgraphics/2021/12/20/us-coronavirus-d
 # Small data wrangling abbrevating the names
 df <- df %>% 
   mutate(state_name = state.abb[match(name, state.name)])
+
+df[9, 7] = "D.C"
 ```
 
-```{r}
+```{r,fig.width=6, fig.height=7}
 # Creating the plot
 plot <-df %>%
-ggplot(aes(x=fully_vaccinated_pct_of_pop, y=deaths_per_100k, label=state_name))+
+ggplot(aes(x=fully_vaccinated_pct_of_pop*100, y=deaths_per_100k, label=state_name))+
   theme_bw()+
   # Setting color,size and alpha to the dots
   geom_point(color="palegreen4",
@@ -57,22 +60,30 @@ ggplot(aes(x=fully_vaccinated_pct_of_pop, y=deaths_per_100k, label=state_name))+
   # Changing and removing titles
   labs(x="Share of total population fully vaccinated", y="",
        title="Avg. monthly deaths per 100,000")+
-  scale_x_continuous(labels = scales::percent_format(accuracy = 1))+
+  scale_x_continuous(labels = percent_format(scale = 1),
+                     breaks = seq(45,80,5),
+                     limits = c(45,80),
+                     expand = c(0, 0))+
+  scale_y_continuous(breaks = seq(from = 0, to = 20, by = 5),
+                     limits = c(0,20),
+                     expand = c(0, 0))+
+  theme(panel.border=element_rect(linetype=3,fill=NA),
+        panel.grid=element_line(linetype ="dotted"))+
   # Writing text on plot
   annotate("text",
-           x=0.59,
+           x=59,
            y=17, label=
              "Lower vaccination rate,
           higher death rate")+
   # Adding arrow
-  geom_segment(aes(x=0.56, y=15, xend=0.55, yend=16.5), 
+  geom_segment(aes(x=56, y=17.5, xend=54, yend=18.5), 
                arrow = arrow(length=unit(.3, 'cm')), lwd=1)+
   annotate("text",
-           x=0.73,
+           x=73,
            y=10, label=
              "Higher vaccination rate,
           lower death rate")+
-    geom_segment(aes(x=0.7, y=8.5, xend=0.71, yend=7), 
+    geom_segment(aes(x=70, y=9, xend=72, yend=7.5), 
                arrow = arrow(length=unit(.3, 'cm')), lwd=1)
 
 plot
@@ -96,7 +107,7 @@ Add the custom line to ggplot using + geom_smooth(method = lm).
 lm( deaths_per_100k ~ fully_vaccinated_pct_of_pop, df)
 ```
 
-```{r}
+```{r,message= FALSE, fig.width=6, fig.height=7}
 # Plotting the line
-plot + geom_smooth(method = lm, se=FALSE,fullrange=TRUE)
+plot + geom_smooth(method = lm, se=FALSE)
 ```
