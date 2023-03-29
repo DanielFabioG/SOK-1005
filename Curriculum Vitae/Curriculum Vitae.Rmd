@@ -1,0 +1,63 @@
+---
+name: Daniel Fabio
+surname: Groth
+position: "Student"
+address: "Handelshøgskolen  UiT, The Arctic University of Norway  Breivangvegen 23, 9010 Tromsø, Norway"
+profilepic: 
+phone: +47 93023630
+www: "sites.google.com/view/daniel-fabio-groth/home"
+email: "danielfabiogroth@gmail.com"
+github: DanielFabioG
+date: "`r format(Sys.time(), '%B %Y')`"
+output:
+  vitae::awesomecv:
+    page_total: true
+---
+
+```{r setup, include=FALSE}
+rm (list = ls())
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(vitae)
+```
+
+# Some stuff about me
+
+-   I started to study Social Economics because of my interest in stocks/cryptocurrency and general interest in economics.
+-   I have a certified course for driving truck, T1-T4.
+-   I have a certified drivers license, B.
+-   I love going to the GYM, hiking and skiing.
+
+# Education
+
+```{r}
+library(tibble)
+tribble(
+  ~ Degree, ~ Year, ~ Institution, ~ Where,
+  "Media and Communication", "2009-2011", "Breivang Videregående Skole", "Tromsø, Norway",
+  "BA in Social Economics and Computer Science", "Ongoing", "School of Business and Economics at UiT", "Tromsø, Norway",
+) %>%
+  detailed_entries(Degree, Year, Institution, Where)
+```
+
+# Professional experience
+
+```{r}
+tribble(
+  ~Year, ~Type, ~Desc,
+  2011, "Shop Assistant", "Coop Prix Håpet.",
+  2013, "Kiosk Employee", "Narvesen.",
+  2015, "Warehouse Employee", "Møbelringen.",
+  2019, "Nursing Assistant", "Nordøya Hjemmetjeneste."
+) %>%
+  brief_entries(
+    glue::glue("Worked as {Type}"),
+    Year,
+    Desc
+  )
+```
+
+# Computer skills
+
+-   R, basic
+
+-   Python, basic
