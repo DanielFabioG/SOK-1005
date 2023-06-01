@@ -1,7 +1,9 @@
 ---
-title: "daniel"
-format: pdf
+title: "Assignment 2"
+author: Daniel Fabio Groth
+format: html
 editor: visual
+echo: true
 warning: false
 ---
 
