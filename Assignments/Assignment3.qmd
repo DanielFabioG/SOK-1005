@@ -123,3 +123,5 @@ lm( deaths_per_100k ~ fully_vaccinated_pct_of_pop, df)
 # Plotting the line
 plot + geom_smooth(method = lm, se=FALSE)
 ```
+
+[QMD file for this site](https://github.com/DanielFabioG/SOK-1005/blob/main/Assignments/Assignment3.qmd)

@@ -92,6 +92,4 @@ ax.set_ylim(0, 800)
 ax.legend();
 ```
 
-[QMD file for this site](https://github.com/DanielFabioG/Assignments/blob/main/Assignment5.qmd)
-
-[Jupyter Notebook here](https://github.com/DanielFabioG/SOK-1005/blob/main/Assignments/Assignment5.ipynb)
+[QMD file for this site](https://github.com/DanielFabioG/SOK-1005/blob/main/Assignments/Assignment5.qmd)

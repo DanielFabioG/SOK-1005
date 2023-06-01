@@ -226,4 +226,4 @@ task2 %>%
   theme_bw()
 ```
 
-[QMD file for this site](https://github.com/DanielFabioG/Assignment4/blob/main/index.qmd)
+[QMD file for this site](https://github.com/DanielFabioG/SOK-1005/blob/main/Assignments/Assignment4.qmd)
