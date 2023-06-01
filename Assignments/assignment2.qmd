@@ -7,6 +7,8 @@ echo: true
 warning: false
 ---
 
+[Back to main page](https://danielfabiog.github.io/SOK-1005/)
+
 ```{r}
 rm(list=ls()) 
 library(tidyverse)
@@ -54,3 +56,5 @@ ggplot(aes(x = wltp, y = stopp)) +
   theme_minimal()+
   geom_smooth(method = lm, se=FALSE,fullrange=TRUE, color="red")
 ```
+
+[Back to main page](https://danielfabiog.github.io/SOK-1005/)

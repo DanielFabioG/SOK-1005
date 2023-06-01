@@ -11,6 +11,8 @@ message: false
 toc: true
 ---
 
+[Back to main page](https://danielfabiog.github.io/SOK-1005/)
+
 ```{r}
 rm (list = ls())
 library(tidyverse)
@@ -225,5 +227,7 @@ task2 %>%
       scale_x_continuous(labels = scales::dollar_format())+
   theme_bw()
 ```
+
+[Back to main page](https://danielfabiog.github.io/SOK-1005/)
 
 [QMD file for this site](https://github.com/DanielFabioG/SOK-1005/blob/main/Assignments/Assignment4.qmd)

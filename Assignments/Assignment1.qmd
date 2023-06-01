@@ -7,6 +7,8 @@ echo: true
 warning: false
 ---
 
+[Back to main page](https://danielfabiog.github.io/SOK-1005/)
+
 ## Assignment 1 - reading static web pages
 
 On the web page: https://www.drroyspencer.com/latest-global-temperatures/
@@ -142,3 +144,4 @@ df_long %>% filter(Year >= 1980) %>%
     labels=c("Average Temperature","Lower Troposphere",
              "Mid-Tropoosphere","Lower Stratosphere","Tropopause"))
 ```
+[Back to main page](https://danielfabiog.github.io/SOK-1005/)

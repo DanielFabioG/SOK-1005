@@ -10,6 +10,8 @@ message: false
 toc: true
 ---
 
+[Back to main page](https://danielfabiog.github.io/SOK-1005/)
+
 ```{python}
 import pandas as pd
 import numpy as np
@@ -91,5 +93,7 @@ ax.set_ylim(0, 800)
 #I add a legend
 ax.legend();
 ```
+
+[Back to main page](https://danielfabiog.github.io/SOK-1005/)
 
 [QMD file for this site](https://github.com/DanielFabioG/SOK-1005/blob/main/Assignments/Assignment5.qmd)
