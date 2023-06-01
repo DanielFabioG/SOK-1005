@@ -18,6 +18,8 @@ toc: true
 tof: true
 ---
 
+[Back to main page](https://danielfabiog.github.io/SOK-1005/)
+
 ```{=html}
 <div class="center">The files has been split into Task1 and one for Task 2, 3 and 4. This has been done after we recieved an email telling us we needed this to deliver. The Full project is the unedited version.</div>
 <div class="center" style="display: flex; justify-content: space-between; margin-top: 20px;">
