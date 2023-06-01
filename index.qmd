@@ -1,5 +1,5 @@
 ---
-title: "Sok-1005"
+title: "SOK-1005"
 description: |
       Data science Spring 2023.  
 date: last-modified
